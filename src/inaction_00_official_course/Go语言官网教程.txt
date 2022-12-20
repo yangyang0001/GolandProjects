@@ -1,0 +1,333 @@
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------  第1章 入门 ------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+学习地址: https://golang.google.cn/doc/tutorial/
+
+环境和开发准备:
+    开发工具:
+        GoLand      安装地址: https://formulae.brew.sh/cask/goland
+        Jetbrian    破解地址: http://idea.javatiku.cn/
+
+    环境配置:
+        1、下载安装环境 https://go.dev/dl/
+
+        2、验证是否安装成功
+            yangjianwei@yangjianweideMacBook-Pro ~ % go version
+            go version go1.19.3 darwin/amd64
+
+        3、配置 GOROOT 和 GOPATH
+        GOROOT: 表示 安装 GO 库的根目录!
+        GOPATH: 表示 开发 GO 程序的目录!
+
+        本人配置如下:
+            yangjianwei@yangjianweideMacBook-Pro inaction_00_official_website % echo $GOROOT
+            /usr/local/go
+            yangjianwei@yangjianweideMacBook-Pro inaction_00_official_website % echo $GOPATH
+            /Users/yangjianwei/GolandProjects/bin
+
+        在 .bash_profile 中配置如下:
+            ############################################  go环境 ########################################
+            export GOROOT=/usr/local/go
+            export GOPATH=/Users/yangjianwei/GolandProjects
+            export PATH=$PATH:$GOROOT/bin
+
+1、Hello World 程序
+
+    在 chapter_01/hello 文件夹下:
+
+    go mod init [module-path] 命令:
+        这种命令类似于 Maven 中的 dependency 中的 groupId artifactId version 之类的, 使用举例如下:
+        yangjianwei@yangjianweideMacBook-Pro hello % go mod init deepblue.com/hello
+        go: creating new go.mod: module deepblue.com/hello
+        go: to add module requirements and sums:
+                go mod tidy
+
+    go run 命令:
+        yangjianwei@yangjianweideMacBook-Pro chapter_01 % go run .
+        Hello, World!
+
+2、调用 greetings 程序 :
+    在 chapter_01/hello 文件夹下使用 chapter_01/greetings 中的 Hello() 方法!
+
+    yangjianwei@yangjianweideMacBook-Pro hello % go mod init deepblue.com/hello
+    go: creating new go.mod: module deepblue.com/hello
+    go: to add module requirements and sums:
+            go mod tidy
+
+    yangjianwei@yangjianweideMacBook-Pro hello % go mod edit -replace deepblue.com/greetings=../greetings
+
+    yangjianwei@yangjianweideMacBook-Pro hello % go mod tidy
+    go: found deepblue.com/greetings in deepblue.com/greetings v0.0.0-00010101000000-000000000000
+
+    yangjianwei@yangjianweideMacBook-Pro hello % go run .
+    Hello, World!
+    Hi zhangsan. Welcome!
+
+3、返回 错误处理 案例
+    func HelloERR(name string) (string, error) {
+
+        if name == "" {
+            err := errors.New("name is empty")
+            return "", err
+        } else {
+            message := fmt.Sprintf("Hello_ERR method, Hello %v. ", name);
+            return message, nil
+        }
+    }
+
+4、练习 数组 案例
+    数组: 定义方式 []string, []int, ... 可以不指定大小, 表明为 动态的! 就是数组的意思!
+    切片: 可以认为是数组的子集, 表示方式类似于 java 中的 subList 或者 java 字符串的 substring 的意思, 具体使用方式如下:
+        var a []string = {"0", "1", "2", "3", "4", "5"}              // 定义一个数组!
+        b := a[1:3] 表示 a index [1, 3) 的一个区间! b 就是数组 [1, 2];   // 使用切片!
+
+
+5、练习 map 案例
+    Go 提供了一种熟悉的语法来处理 map 类型。此语句将键"route"设置为值66: m["route"] = 66
+
+    此语句检索存储在键下的值"route"并将其分配给新变量 i: i := m["route"]
+
+    如果请求的键不存在, 我们将得到值类型的零值。在这种情况下, 值类型是int, 因此零值是0:
+    j := m["root"]
+    // j == 0
+
+
+    内置len函数返回 map 中的项目数:  n := len(m)
+
+
+    内置delete函数从 map 中删除一个条目:  delete(m, "route"), 该delete函数不返回任何内容, 如果指定的键不存在, 则什么也不做。
+
+    双值赋值测试键的存在: i, ok := m["route"]
+    在此语句中, 第一个值 (i) 被赋予存储在键下的值"route"。如果该键不存在, i则为值类型的零值 (0)。第二个值 (ok)bool表示true键是否存在于映射中, false如果不存在。
+
+    要在不检索值的情况下测试键, 请使用下划线代替第一个值: _, ok := m["route"]
+
+    要迭代 map 的内容, 请使用range关键字:
+    for key, value := range m {
+        fmt.Println("Key:", key, "Value:", value)
+    }
+
+
+    要使用一些数据初始化 map , 请使用 如下格式:
+    commits := map[string]int{
+        "rsc": 3711,
+        "r":   2138,
+        "gri": 1908,
+        "adg": 912,
+    }
+
+    可以使用相同的语法来初始化空映射, 这在功能上与使用以下make函数相同:
+    m = map[string]int{}
+
+6、多返回值 案例
+    func Hellos(names []string) (map[string]string, error) {
+
+    	resultMap := make(map[string]string)
+
+    	for _, name := range names {
+    		message, err := HelloERR(name)
+    		if err != nil {
+    			log.Fatal(err)
+    			return nil, err
+    		} else {
+    			resultMap[name] = message
+    		}
+    	}
+
+    	return resultMap, nil
+    }
+
+7、随机值 案例
+    必须和 init 方法共同执行, 否则失效!
+    func init() {
+    	rand.Seed(time.Now().UnixNano())
+    }
+
+8、返回随机问候语, 使用以下 3 个方法共同完成, 缺一不可!
+    func RandomHello(names []string) (map[string]string, error) {
+
+    	resultMap := make(map[string]string)
+
+    	for index, name := range names {
+
+    		if name == "" {
+    			errorinfo := fmt.Sprintf("names index is %v", index, ", the value is empty!")
+    			err := errors.New(errorinfo)
+    			return nil, err
+    		} else {
+    			message := fmt.Sprintf(formatHello(), name)
+    			resultMap[name] = message
+    		}
+    	}
+
+    	return resultMap, nil
+    }
+
+    func init() {
+    	rand.Seed(time.Now().UnixNano())
+    }
+
+    func formatHello() string {
+    	formats := []string{
+    		"Hi %v. Welcome!",
+    		"Greate to see you, %v!",
+    		"Hail, %v! Well met!",
+    	}
+
+    	return formats[rand.Intn(len(formats))]
+    }
+
+添加测试单元:
+    这种公司频繁开发中没有价值, 因为有 日常环境, 预发环境, 线上环境!
+
+
+编译并安装应用程序:
+    go build   命令: 编译包及其依赖项, 但不安装结果。
+    go install 命令: 编译并安装包。
+
+    1、在 hello 目录下执行 go build, 会在当前目录下 产生一个可执行文件 hello
+        yangjianwei@yangjianweideMacBook-Pro hello % go build
+
+    2、运行 hello 可执行文件
+        yangjianwei@yangjianweideMacBook-Pro hello % ./hello
+
+    3、查看 GO 安装路径, GO 命令将在其中安装当前包。
+        yangjianwei@yangjianweideMacBook-Pro hello % go list -f '{{.Target}}'
+        /Users/yangjianwei/GolandProjects/bin/hello
+
+    4、将 Go 安装目录添加到系统的 shell 路径中。以便在每个终端窗口中都可以执行 可执行文件! 环境中已经配置完毕!
+        export PATH=$PATH:/Users/yangjianwei/GolandProjects/bin
+
+        也就是本人配置的 GO 环境中的 GOPATH
+        ############################################  go环境 ########################################
+        export GOROOT=/usr/local/go
+        export GOPATH=/Users/yangjianwei/GolandProjects
+        export PATH=$PATH:$GOROOT/bin
+
+    5、执行安装, 就将当前 目录下的可执行文件 hello 安装在上面的 GOPATH 中了!
+        yangjianwei@yangjianweideMacBook-Pro hello % go install
+
+
+    6、在 GoLand 开启任意一个终端执行 hello
+        yangjianwei@yangjianweideMacBook-Pro GolandProjects % hello
+        -------------------------- 1、Hello World 程序  ----------------------------
+        Hello, World
+        -------------------------- 2、调用greetings程序 ----------------------------
+        Hello method, Hello zhangsan. Welcome!
+        -------------------------- 3、返回 错误处理 案例 ----------------------------
+        HelloERR method, Hello zhangsan.
+        -------------------------- 4、练习 数组 案例 ----------------------------
+        index is : 0 , value is : 11
+        index is : 1 , value is : 22
+        index is : 2 , value is : 33
+        -------------------------- 5、练习 map 案例 ----------------------------
+        key is : a , value is : zhangsan
+        key is : b , value is : lisi
+        key is : c , value is : wangwu
+        -------------------------- 6、多返回值 案例 ----------------------------
+        key is : wangwu , value is : HelloERR method, Hello wangwu.
+        key is : zhangliu , value is : HelloERR method, Hello zhangliu.
+        key is : zhangsan , value is : HelloERR method, Hello zhangsan.
+        key is : lisi , value is : HelloERR method, Hello lisi.
+        -------------------------- 7、随机值 案例 ----------------------------
+        [0 - 10) 的随机值 : 0
+        -------------------------- 8、返回随机问候语 ----------------------------
+        key is : lisi , value is : Hi lisi. Welcome!
+        key is : wangwu , value is : Hi wangwu. Welcome!
+        key is : zhangliu , value is : Hi zhangliu. Welcome!
+        key is : zhangsan , value is : Hail, zhangsan! Well met!
+
+------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------  第2章 多模块工作区入门 -----------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+必被条件:
+    必须安装 Go 1.18 或更高版本。
+
+直接引用包案例:
+    在 chapter_02 目录下创建 hello/hello.go 文件, 并执行 go mod init deepblue.com/hello, 来创建 hello 模块!
+
+    在 chapter_02 目录下创建 greetings/greetings.go 文件, 并执行 go mod init deepblue.com/greetings, 来创建 greetings 模块!
+
+    在 chapter_02/hello 目录下 使用 stringutil 包文件, 执行 go get golang.org/x/example/stringutil, 不下载源码直接使用包! 执行如下:
+    yangjianwei@yangjianweideMacBook-Pro hello % go get golang.org/x/example/stringutil
+    go: added golang.org/x/example v0.0.0-20220412213650-2e68773dfca0
+
+下载 golang.org/x/example, 并在 stringutil 中添加方法:
+    在 chapter_02 目录下执行 git clone https://go.googlesource.com/example, 执行如下:
+    yangjianwei@yangjianweideMacBook-Pro chapter_02 % git clone https://go.googlesource.com/example
+    Cloning into 'example'...
+    remote: Total 204 (delta 91), reused 204 (delta 91)
+    Receiving objects: 100% (204/204), 128.86 KiB | 110.00 KiB/s, done.
+    Resolving deltas: 100% (91/91), done.
+
+使用 go.work:
+    在 chapter_02 目录下执行命令: go work init, 创建 go.work 文件, 哪个 module 中有 main 入口函数, 首先引入再说!
+    go work use hello/
+
+    为了使用 greetings 和 example 再次执行:
+    go work use greetings/
+    go work use example/
+
+总结: 多 module 情况下, 一般是开发中常用的情况, 这种 go.work 能够串联和管理 工作空间中的 多个 module, 使他们能够随意的调用!
+注意: 哪个 module 中有 main 入口函数, 首先引入再说!
+
+------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------  第3章 访问关系数据库 ---------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+DROP TABLE IF EXISTS album;
+CREATE TABLE album (
+  id         INT AUTO_INCREMENT NOT NULL,
+  title      VARCHAR(128) NOT NULL,
+  artist     VARCHAR(255) NOT NULL,
+  price      DECIMAL(5,2) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO album
+  (id, title, artist, price)
+VALUES
+  (1, 'Blue Train', 'John Coltrane', 56.99),
+  (2, 'Giant Steps', 'John Coltrane', 63.99),
+  (3, 'Jeru', 'Gerry Mulligan', 17.99),
+  (4, 'Sarah Vaughan', 'Sarah Vaughan', 34.98);
+
+TODO: 注意点: 属性首字母必须大写, 因为这样在序列化时不被忽略!
+
+type Album struct {
+    ID     int64
+    Title  string
+    Artist string
+    Price  float32
+}
+
+参考 chapter_03 中的代码!
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------ 第4章 使用 Go 和 Gin 创建 RestfulAPI ------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+再次重复 类名, 属性名, 方法名 等大小写的问题! 首字母大写表示可以在 序列化时能够进行访问, 否则直接忽略掉!
+
+参考 chapter_04 中的代码!
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------- 第5章 泛型入门 -----------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+在泛型之中比较常用 类型声明, 这种类似于 java 中的 Object 父类的意思, 举例:
+    type Number interface {
+        int64 | float64
+    }
+
+参考 chapter_05 中的代码!
+
+------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------- 第6章 模糊测试入门 ---------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+go test 指令的使用!
+    yangjianwei@yangjianweideMacBook-Pro fuzz % go test
+    PASS
+    ok      inaction_00_official_website/chapter_06/fuzz    0.336s
+
+作为了解, 有了精确测试, 还需要模糊测试吗? 模糊测试代码量还比较多! 当然有愿意学习的自己去官方网站学习吧, 本人不提供案例了!
+
+
