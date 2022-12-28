@@ -48,7 +48,7 @@ func main() {
 
 	fmt.Println("----------------------------- 5、数组 和 结构体地址获取案例 ------------------------")
 	/**
-	验证了 数组参数的方法 是 值传递; 因此以后使用值传递的方法时, 要特别小心!
+	验证了 数组是 按照 引用传递的, 数组名称就是 地址, 这在 C 语言中有明确固定!
 	arr address is :0xc000012030, arr = [100 200 300 400 500]
 	update method invoke start, arr address is :0xc000012038, arr = [100 200 300 400 500]
 	update method invoke start, arr address is :0xc000012038, arr = [8888 200 300 400 500]
@@ -62,11 +62,14 @@ func main() {
 	var arraddress *[]int = &arr
 	fmt.Printf("arr address is :%v, arr = %v \n", &arraddress, arr)
 	update(arr)
+	fmt.Printf("arr address is :%v, arr = %v \n", &arraddress, arr)
 
+	fmt.Println("-------------------------------------------------------")
 	var mine Mine = Mine{1, "zhangsan", "zhangsan"}
 	var add *Mine = &mine
 	fmt.Printf("mine address is :%v, json is :%v \n", &add, jsonParse(mine))
 	setName(mine, "Yang")
+	fmt.Printf("mine address is :%v, json is :%v \n", &add, jsonParse(mine))
 
 }
 
