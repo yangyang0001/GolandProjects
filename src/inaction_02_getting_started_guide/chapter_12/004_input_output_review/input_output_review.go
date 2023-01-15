@@ -29,14 +29,16 @@ func main() {
 	//fmt.Println("----------------------------------- 5、ReadGZipFile ------------------------------------")
 	//ReadGZipFile()
 	//
-	fmt.Println("----------------------------------- 6、WriteFile ------------------------------------")
-	WriteFile()
+	//fmt.Println("----------------------------------- 6、WriteFile ------------------------------------")
+	//WriteFile()
 	//
 	//fmt.Println("----------------------------------- 7、AppendFile   ------------------------------------")
 	//AppendFile()
 	//
 	//fmt.Println("----------------------------------- 8、CopyFile     -------------------------------------")
 	//CopyFile()
+
+	CopyFileWithBytes()
 
 
 }
@@ -239,9 +241,9 @@ func AppendFile()  {
 
 	for i := 0; i < 10; i++ {
 		writer.WriteString("i = " + strconv.Itoa(i) + "\n")
+		writer.Flush()
 	}
 
-	writer.Flush()
 
 }
 
@@ -265,5 +267,42 @@ func CopyFile()  {
 	writer := bufio.NewWriter(targetfile)
 
 	io.Copy(writer, reader)
+
+}
+
+func CopyFileWithBytes()  {
+
+	sourcename := "/Users/yangjianwei/GolandProjects/src/inaction_02_getting_started_guide/chapter_12/004_input_output_review/copyfilewith_source.txt"
+	targetname := "/Users/yangjianwei/GolandProjects/src/inaction_02_getting_started_guide/chapter_12/004_input_output_review/copyfilewith_target.txt"
+
+	sourcefile, err := os.Open(sourcename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer sourcefile.Close()
+
+	targetfile, err := os.OpenFile(targetname, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer targetfile.Close()
+
+	var buff = make([]byte, 1024)
+
+	reader := bufio.NewReader(sourcefile)
+	writer := bufio.NewWriter(targetfile)
+
+	for {
+		n, err := reader.Read(buff)
+
+		fmt.Println(string(buff[0:n]))
+
+		if err == io.EOF {
+			log.Fatal(err)
+		}
+
+		writer.Write(buff[0:n])
+		writer.Flush()
+	}
 
 }

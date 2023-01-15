@@ -597,7 +597,19 @@ new make 案例
         在 java_springboot 工程中 有一个 java 版的测试案例!
 
 
+os 包
+    使用 os args 参数, 命令格式如下:
 
+    yangjianwei@yangjianweideMacBook-Pro 005_os_flag % go run . zhangsan lisi wangwu
+    index = 0, arg = /var/folders/4b/rp5sydj14cz0vhcmqm7p2vgc0000gn/T/go-build893158799/b001/exe/os_flag
+    index = 1, arg = zhangsan
+    index = 2, arg = lisi
+    index = 3, arg = wangwu
+    hello zhangsan
+
+
+
+flag 包
 
 
 
