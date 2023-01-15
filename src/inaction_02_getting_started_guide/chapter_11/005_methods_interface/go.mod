@@ -1,3 +1,3 @@
 module deepblue.com/inaction_02/chapter_11/methods_interface
 
-go 1.19
+go 1.16

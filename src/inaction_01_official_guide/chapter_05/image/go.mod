@@ -1,5 +1,5 @@
 module deepblue.com/image
 
-go 1.19
+go 1.16
 
 require golang.org/x/tour v0.1.0

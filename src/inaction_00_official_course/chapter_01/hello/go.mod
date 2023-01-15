@@ -1,6 +1,6 @@
 module deepblue.com/inaction_00/hello
 
-go 1.19
+go 1.16
 
 replace deepblue.com/inaction_00/greetings => ../greetings
 

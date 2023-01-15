@@ -554,8 +554,47 @@ new make 案例
 
     在 go 语言中使用方式如下:
 
+    输入 string 类型参数:
+        var firtname, lastname string
+        fmt.Scanln(&firtname, &lastname)        fmt.Scanln() 在一行中用空格分隔! 这也就可以输入 string 类型的参数了!
+
+    输入 其他类型 参数:
+        var i int
+        var j float64
+        var k string
+        fmt.Scanln(&i, &j, &k)                  fmt.Scanln() 同样可以对不同类型的参数进行设置值!
+
+    指定输入格式的:
+        var m int
+        var n float64
+        var q string
+        var input string = "10 , 100 , zhangsan"
+        var format string = "%d , %f , %s"
+        fmt.Sscanf(input, format, &m, &n, &q)   fmt.Sscanf(input, format, &m, &n, &q) 这是分别设置值的 使用方式!
 
 
+文件读写:
+
+    判定文件是否存在 方法:
+        func fileExist(path string) bool {
+            _, err := os.Stat(path)
+
+            if err != nil {
+                if os.IsExist(err) {
+                    return true
+                }
+                return false
+            }
+
+            return true
+        }
+
+    文件如果不存在, 使用如下的模式则自动创建:
+    file, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0666)
+
+    TODO:
+        在 MacOS 系统下 使用 本系统压缩工具 形成的 zip 文件时, 会有前缀名称为 __MACOSX 的文件, 这个文件 只有在 Windows 系统下才能看到!
+        在 java_springboot 工程中 有一个 java 版的测试案例!
 
 
 

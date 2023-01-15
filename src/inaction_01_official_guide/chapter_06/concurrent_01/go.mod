@@ -1,3 +1,3 @@
 module concurrent_01
 
-go 1.19
+go 1.16

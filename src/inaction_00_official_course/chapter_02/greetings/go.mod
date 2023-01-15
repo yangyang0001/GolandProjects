@@ -1,3 +1,3 @@
 module deepblue.com/greetings
 
-go 1.19
+go 1.16

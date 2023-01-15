@@ -1,3 +1,3 @@
 module deepblue.com/inaction_02/chapter_04/pointer
 
-go 1.19
+go 1.16

@@ -1,6 +1,6 @@
 module deepblue.com/inaction_02/chapter_10/struct_new_use
 
-go 1.19
+go 1.16
 
 replace deepblue.com/inaction_02/chapter_10/struct_new => ../003_struct_new
 
