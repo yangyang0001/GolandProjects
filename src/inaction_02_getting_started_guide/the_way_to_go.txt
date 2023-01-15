@@ -608,8 +608,37 @@ os 包
     hello zhangsan
 
 
-
 flag 包
+    了解即可!
+
+fmt.Fprint
+    了解即可!
+
+json 格式化
+    在 go1.16 中还没有 提供 any 的类型, 这个必须用 空接口来接收, 格式如下:
+        func jsonParse(obj interface{}) string {
+            marshal, err := json.Marshal(obj)
+
+            if err != nil {
+                log.Fatal(err)
+            }
+
+            return string(marshal)
+        }
+
+    以后 有了 any 类型, 使用格式如下:
+        func jsonParse(obj any) string {
+        	marshal, err := json.Marshal(obj)
+
+        	if err != nil {
+        		log.Fatal(err)
+        	}
+
+        	return string(marshal)
+        }
+
+gob
+    go 语言中的 RPC 的使用, 这里只了解 编码解码的 原理! 案例中也没有 给出注册中心的概念! 这在 java 中有非常重要的 使用比例!
 
 
 
