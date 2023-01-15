@@ -295,8 +295,6 @@ func CopyFileWithBytes()  {
 	for {
 		n, err := reader.Read(buff)
 
-		fmt.Println(string(buff[0:n]))
-
 		if err == io.EOF {
 			log.Fatal(err)
 		}
