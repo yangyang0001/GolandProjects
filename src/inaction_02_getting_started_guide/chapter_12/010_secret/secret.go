@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha1"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"log"
@@ -26,5 +27,15 @@ func main() {
 	}
 	checksum := hash.Sum(result)
 	fmt.Printf("hash result = %x \n", checksum)
+
+	fmt.Println("--------------------------- 3、为 zhangsan 字符串产生 hash256 ---------------------------")
+	sha256 := sha256.New()
+	sha256.Write([]byte("zhangsan"))
+
+	var buff []byte
+	sum := sha256.Sum(buff)
+	fmt.Printf("sum = %x \n", sum)
+
+
 
 }

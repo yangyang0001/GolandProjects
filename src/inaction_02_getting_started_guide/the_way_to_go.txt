@@ -640,22 +640,78 @@ json 格式化
 gob
     go 语言中的 RPC 的使用, 这里只了解 编码解码的 原理! 案例中也没有 给出注册中心的概念! 这在 java 中有非常重要的 使用比例!
 
+go 语言中的加密学
+    参考 java_security 工程学习加密解密原理就可以了, 这里只是提供了 伪随机数生成器中的东西, md sh 相关的生成器之类的东西!
 
 
+------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------- 第 13 章: 异常处理 -------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+注意:
+    在 go 语言中 如果方法有抛出错误或者异常的可能则 一定要处理否则 程序一旦崩溃非常危险!
 
+举例:
+    if result, err := Function(""); err != nil {
+        // do something for error!
+    } else {
+        ....
+    }
 
+定义新的错误:
+    err := errors.New("")
 
+中止程序的代码:
+    os.Exit(1)
 
+错误类型 和 错误变量的 命名规范:
+    错误类型 命名规范: xxxError, 举例: FileNotFoundError
+    命名规范 命名规范: errxxx 或者 Errxxx
 
+运行时异常和 panic
 
+    注意: 不能随意地用 panic() 中止程序, 必须尽力补救错误让程序能继续执行! panic 不会阻止 defer 的执行!
 
+从 panic 中恢复 (recover)
 
+    使用规范:
+        recover 必须使用在 defer 修饰的方法中!
 
+        panic 使用的时候, 如果想要捕获这种异常, 必须要在 上层目录中有 defer recover 去 catch 住这种异常, 使用格式如下:
 
+            同级捕获:
+                defer func() {
+                    if e := recover(); e != nil {
+                        ...
+                    }
+                }()
+                panic("throw error to same level!")
 
+            冒泡捕获:
+                defer func() {
+                    if e := recover(); e != nil {
+                        ...
+                    }
+                }
+                // 向上抛异常捕获!
+                func() {
+                    panic("throw error to upper level!")
+                }()
 
+            以上这种 处理 error 的模式又称为 defer recover panic 模式!
 
+        recover 不影响 defer 指令的执行, 在 panic 被 recover 之前执行完成所有的 defer 指令! 且 panic() 执行后的方法不执行!
 
+计算程序 消耗的时间:
+
+    start := time.Now()
+
+    ......
+    ......
+
+    cost  := time.Now().Sub(start)
+
+    fmt.Printf("start = %v \n", start)
+    fmt.Printf("cost  = %v \n", cost)
 
 
 
