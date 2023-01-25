@@ -842,7 +842,8 @@ goroutine 常用方式:
 通道 链的实现:
     channel_chain
 
-
+方法类型的通道:
+    这个 chan func(paramlist ...) (valuelist ...)
 
 
 
