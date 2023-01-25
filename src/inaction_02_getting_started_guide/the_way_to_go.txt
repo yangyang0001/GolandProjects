@@ -714,32 +714,133 @@ go 语言中的加密学
     fmt.Printf("cost  = %v \n", cost)
 
 
+------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------- 第 14 章: 协程和通道 ------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+什么协程?
+    程序中并发处理的部分 统称为 协程, 又称为 goroutine!
+
+协程特点:
+    从上面的定义就可以看出, 协程比线程的重量级更轻!
+
+    协程 自动开辟栈空间, 自动回收, 用不到程序员参与!
+
+协程的使用方式:
+    go func() {}
+
+并发 并行 的基础概念, 以及为何出现了 并发问题 参考工程 java_concurrent! 内部有 可以看 4 到 10本书左右, java_concurrent 工程中记录了 4本书左右的并发基础知识!
+
+协程的声明周期:
+    线程A 中有 协程B 和 协程C
+
+    完整周期:
+    |-------------------------- 线程A 完整周期 --------------------------|
+            |-------------------------- 协程B 完整周期 --------------------------|
+                    |-------------------------- 协程C 完整周期 --------------------------|
+
+    真实周期:
+    |-------------------------- 线程A 完整周期 --------------------------|
+            |-------------------------- 协程B 完整周期 ------------------|
+                    |-------------------------- 协程C 完整周期 ----------|
+
+    根据真实周期 来看, 协程 是依赖 主线程的生命周期, 协程的声明周期不可能超过 主线程的生命周期!
 
 
+通道 channel
+
+    TODO: 使用场合: 只能在 goroutine 之间使用, 否则 channel 是没有价值的, 甚至会造成这个 channel 是阻塞的!
+
+    协程之间不通过 共享变量 进行通信! 在 go 语言中提供了 通道这种概念, 通道中 任何一个数据的 读取都是原子性的!
+
+    通道的 定义格式如下(两种方式):
+        var 通道名称 chan 数据类型
+        var 通道名称 = make(chan 数据类型)  推荐使用这种方式!
+
+    通信符号 <-, 也表示 数据流量的流向!
+
+    通道中的数据 符合 先进先出(FIFO)的 顺序, 且 使用 channel 必须在 协程中使用!
+
+    通道 如果是 两边的 goroutine 是不通的, 则 channel 将处于 阻塞状态!
 
 
+无缓冲 channel
+    无 缓冲的 channel 只能容纳 1个 元素! cap(channel) = 0, 是没有缓冲空间的!
+
+带缓冲 channel
+    channel := make(chan int, 100), 这样定义就代表了 cap(channel) = 100, 缓冲空间为 100!
+
+    案例如下:
+        channel := make(chan int)
+        fmt.Printf("none buff channel cap = %v \n", cap(channel))
+
+        channel = make(chan int, 100)
+        fmt.Printf("have buff channel cap = %v \n", cap(channel))
+
+        yangjianwei@yangjianweideMacBook-Pro 004_channel_buff % go run .
+        none buff channel cap = 0
+        have buff channel cap = 100
+
+通道的方向:
+    var send_only <-chan int            channel 只能往外 写数据
+    var rece_only chan<- int            只能向 channel 中写数据
 
 
+关闭通道
+    通道 不需要进行关闭, 因为 通道不是 文件! 如果想关闭也可以! 且只有 发送方 才能手动关闭 channel!
+
+    for-range 是会自动检测 通道是否 已经关闭的!
+
+通道 select
+    使用格式:
+
+        select {
+        case element1 := <- channel1
+            ....
+        case element2 := <- channel2
+            ....
+        case element3 := <- channel3
+            ....
+        default:
+            ....
+        }
+
+    使用说明:
+        case 中的如果都处于阻塞, 则执行 default, 否则会随机选择一个 case 执行!
+
+通道、超时 和 计时器 Ticker
+
+    引子:
+    // 2006-01-02 15:04:05 这个时间 据说是 golang 语言诞生的时间, 这是固定写法, 不能随意修改!
+    	return time.Unix(time.Now().Unix(), 0).Format("2006-01-02 15:04:05")
+    }
+
+    time.Tick 的使用, 使用 ns(纳秒) 作为间隔的!
+
+结构体 channel 的使用
+    channel := make(chan MineTask)
 
 
+通过 channel 和 goroutine 实现 自增序列:
 
+    func SequenceChannel() chan int {
+        channel := make(chan int)
+        count := 0
 
+        go func() {
+            for {
+                channel <- count
+                count++
+            }
+        }()
 
+        return channel
+    }
 
+goroutine 常用方式:
+    在 func 中使用 go func() {}() 然后返回 channel! 举例: 类似于上面 实现自增序列 的使用方式,
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+通道 链的实现:
+    channel_chain
 
 
 
