@@ -848,21 +848,49 @@ goroutine 常用方式:
 ------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------- 第 15 章: 网络、模板与网页应用 ------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
-模拟服务:
+模拟 TCP 服务:
     编写 tcp server/client
     参考 001_tcp_client 到 004_simple_tcp_server 的代码!
 
+模拟 HTTP Web 服务:
 
+访问并读取页面数据
+    http.Head 的使用
+    http.Get  的使用
 
+模拟 HTTP Web 服务, 返回 html 页面
 
+使用 template 实现 web 服务!
+    这项本人只 体验了一把, 目前的水平 也就到 java 的 servlet 的水平! 这里只做了解, 如果要搞 web 用 java 代替吧! 期待未来 有人来封装 web 相关的高级中间件!
 
+总结:
+    就目前 go 处理 web 的能力 和 java 比简直是 天壤之别! go 的发展潜力很大!
 
+用 rpc 实现远程过程调用  参考 模块: 012_rpc_objects, 012_rpc_server, 012_rpc_client
 
+    核心使用如下:
+    服务端
+        object := new(...)
+        rpc.Register(object)
+        rpc.HandleHTTP()
+        listener, e := net.Listen("tcp", "localhost:1234")
+        ...
+        go http.Serve(listener, nil)
 
+    客户端
+        client, err := rpc.DialHTTP("tcp", "localhost:1234")
+        ...
+        err := client.Call()
 
+    模块引用问题:
+        go mod edit -replace deepblue.com/rpc_objects=../012_rpc_objects
+        go mod tidy
 
-
-
+    TODO: 核心关键点注意:
+        注册的 是 struct 的方法, 所以方法必须是 结构体的方法, 格式为且一定如下:
+        func (object *T) 方法名称 (object *T, result *K) error {
+            ...
+        }
 
 
 
