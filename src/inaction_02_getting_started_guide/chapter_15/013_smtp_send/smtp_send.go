@@ -8,32 +8,50 @@ import (
 
 const (
 	// 邮件服务器地址
-	SMTP_MAIL_HOST  = "smtp.126.com"
+	SMTP_MAIL_HOST  = "smtp.163.com"
+
 	// 端口
 	SMTP_MAIL_PORT  = "25"
+
+	// 拼接 服务器和端口
+	SMTP_MAIL_ADDR = "smtp.163.com:25"
+
 	// 发送邮件用户账号
-	SMTP_MAIL_USER  = "yy7546389@126.com"
+	SMTP_MAIL_USERNAME  = "yy7546389@163.com"
+
 	// 授权密码
-	SMTP_MAIL_PWD   = "Yangjianwei01"
-	// 发送邮件昵称
-	SMTP_MAIL_NICKNAME  = "SMTPMail"
+	SMTP_MAIL_PASS   = "xxxxx"		//  这块得去授权 发送方和接收方的设置!
 )
 
 func main() {
-	to_addresses := []string{"yy7546389@gmail.com"}
-	SendMail(to_addresses)
+	dests := []string{"2017585616@qq.com"}
+	DoSend(dests)
 }
 
 
-func SendMail(to_addresses []string) {
-	// 通常身份应该是空字符串, 填充用户名.
-	auth := smtp.PlainAuth("", SMTP_MAIL_USER, SMTP_MAIL_PWD, SMTP_MAIL_HOST)
-	for _, to_address := range to_addresses {
-		addr := fmt.Sprintf("%v:%v", SMTP_MAIL_HOST, SMTP_MAIL_PORT)
-		msg := []byte("This is the email body.")
-		err := smtp.SendMail(addr, auth, SMTP_MAIL_USER, []string{to_address}, msg)
+func DoSend(dests []string) {
+	// Set up authentication information. 通常身份应该是空字符串, 填充用户名.
+	auth := smtp.PlainAuth(
+		"",
+		SMTP_MAIL_USERNAME,
+		SMTP_MAIL_PASS,
+		SMTP_MAIL_HOST,
+	)
+
+	for _, dest := range dests {
+		// Connect to the server, authenticate, set the sender and recipient,
+		// and send the email all in one step.
+		err := smtp.SendMail(
+			SMTP_MAIL_ADDR,
+			auth,
+			SMTP_MAIL_USERNAME,
+			[]string{dest},
+			[]byte("this is the email body."),
+		)
 		if err != nil {
+			fmt.Printf("send error = %v \n", err)
 			log.Fatal(err)
 		}
 	}
+
 }
