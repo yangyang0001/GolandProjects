@@ -7,13 +7,16 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"time"
 )
 
-var loginFilePath  = "/Users/yangjianwei/GolandProjects/src/inaction_03_web/chapter_04/001_form_input/login.html"
-var uploadFilePath = "/Users/yangjianwei/GolandProjects/src/inaction_03_web/chapter_04/001_form_input/upload.html"
+var LoginFilePath = "/Users/yangjianwei/GolandProjects/src/inaction_03_web/chapter_04/001_form_input/login.html"
+var UploadFilePath = "/Users/yangjianwei/GolandProjects/src/inaction_03_web/chapter_04/001_form_input/upload.html"
+
+var UploadPath = "/Users/yangjianwei/GolandProjects/src/inaction_03_web/chapter_04/upload/"
 
 func main() {
 
@@ -50,7 +53,7 @@ func LoginHandler(response http.ResponseWriter, request *http.Request)  {
 		token := fmt.Sprintf("%x", hash.Sum(nil))
 
 		// 将 token 写入表单中!
-		temp, err := template.ParseFiles(loginFilePath)
+		temp, err := template.ParseFiles(LoginFilePath)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -89,19 +92,27 @@ func UploadHandler(response http.ResponseWriter, request *http.Request) {
 		token := fmt.Sprintf("%x", hash.Sum(nil))
 
 		// 将 token 写入表单中!
-		temp, err := template.ParseFiles(uploadFilePath)
+		temp, err := template.ParseFiles(UploadFilePath)
 		if err != nil {
 			log.Fatal(err)
 		}
 		temp.Execute(response, token)
+
 	} else {
-		file, header, err := request.FormFile("uploadfile")
+		sourcefile, header, err := request.FormFile("uploadfile")
 		if err != nil {
 			log.Fatal(err)
 		}
+		defer sourcefile.Close()
 
+		fmt.Printf("header = %v \n", header)
+		uploadfile, err := os.OpenFile(UploadPath + header.Filename, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer uploadfile.Close()
 
-
+		io.Copy(uploadfile, sourcefile)
 	}
 }
 
