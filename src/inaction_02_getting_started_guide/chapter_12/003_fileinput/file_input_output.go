@@ -14,26 +14,26 @@ import (
 
 func main() {
 
-	fmt.Println("----------------------------------- 1、reader.ReadString -----------------------------------")
-	readLineFile()
-
-	fmt.Println("----------------------------------- 2、reader.Read(....) ----------------------------------")
-	readBuffFile()
-
-	fmt.Println("----------------------------------- 3、readColumnFile -------------------------------------")
-	readColumnFile()
-
-	fmt.Println("----------------------------------- 4、readZipFile案例 -------------------------------------")
-	readZipFile()
-
-	fmt.Println("----------------------------------- 5、readGZipFile案例 ------------------------------------")
-	readGZipFile()
-
-	fmt.Println("----------------------------------- 5、writeFile  案例 ------------------------------------")
-	writeFile()
-
-	fmt.Println("----------------------------------- 6、appendFile 案例 -------------------------------------")
-	appendFile()
+	//fmt.Println("----------------------------------- 1、reader.ReadString -----------------------------------")
+	//readLineFile()
+	//
+	//fmt.Println("----------------------------------- 2、reader.Read(....) ----------------------------------")
+	//readBuffFile()
+	//
+	//fmt.Println("----------------------------------- 3、readColumnFile -------------------------------------")
+	//readColumnFile()
+	//
+	//fmt.Println("----------------------------------- 4、readZipFile案例 -------------------------------------")
+	//readZipFile()
+	//
+	//fmt.Println("----------------------------------- 5、readGZipFile案例 ------------------------------------")
+	//readGZipFile()
+	//
+	//fmt.Println("----------------------------------- 5、writeFile  案例 ------------------------------------")
+	//writeFile()
+	//
+	//fmt.Println("----------------------------------- 6、appendFile 案例 -------------------------------------")
+	//appendFile()
 
 	fmt.Println("----------------------------------- 7、copyFile   案例 -------------------------------------")
 	copyFile()
@@ -340,18 +340,13 @@ func copyFile() {
 	}
 	defer sourcefile.Close()
 
-	targetfile, err := os.OpenFile(targetname, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	targetfile, err := os.OpenFile(targetname, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer targetfile.Close()
 
-	reader := bufio.NewReader(sourcefile)
-	writer := bufio.NewWriter(targetfile)
-
-	written, err := io.Copy(writer, reader)
-
-	fmt.Printf("written = %v \n", written)
+	io.Copy(targetfile, sourcefile)
 }
 
 

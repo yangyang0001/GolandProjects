@@ -36,8 +36,9 @@ func main() {
 	//AppendFile()
 	//
 	//fmt.Println("----------------------------------- 8、CopyFile     -------------------------------------")
-	//CopyFile()
+	CopyFile()
 
+	//fmt.Println("----------------------------------- 9、CopyFileBuff -------------------------------------")
 	CopyFileWithBytes()
 
 
@@ -257,17 +258,14 @@ func CopyFile()  {
 		log.Fatal(err)
 	}
 	defer sourcefile.Close()
-	reader := bufio.NewReader(sourcefile)
 
 	targetfile, err := os.OpenFile(targetname, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer targetfile.Close()
-	writer := bufio.NewWriter(targetfile)
 
-	io.Copy(writer, reader)
-
+	io.Copy(targetfile, sourcefile)
 }
 
 func CopyFileWithBytes()  {

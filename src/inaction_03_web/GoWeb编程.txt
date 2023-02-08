@@ -158,9 +158,125 @@ web 服务:
 ------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------- 第 4 章: 表单 ------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------
+反思:
+    java web 已经非常 完善了! 那么 go 语言产生的时间 比 java 短, 可否借鉴一下 java 处理 web 方面的思想呢? 甚至翻译 java 为 go 呢?
+
+案例:
+    首先 搭建一个 go web 服务
+
+    使用 template.ParseFiles 来处理返回的 html 文本!
+
+注意:
+    request.Form 是一个 map[string][]string 类型, key = string, value = []string 类型! 且内部提供了 Set, Get, Add, Del 方法!
+
+验证表单的输入:
+    验证方式:
+        前端校验 和 后端校验!
+
+    处理手段:
+        有了 template.ParseFiles() 方法来处理 html 文本文件, 这时前端是固定的, 没有什么硬性对 前端表单进行校验, 纵然做了, 后端也会再次处理!
+
+    正则表达校验:
+
+        数字校验:
+        if m, _ := regexp.MatchString("^[0-9]+$", request.FormValue("age")); !m {
+        	return false
+        }
+
+        中文校验:
+        if m, _ := regexp.MatchString("^\\p{Han}+$", request.FormValue("realname")); !m {
+        	return false
+        }
+
+        英文校验:
+        if m, _ := regexp.MatchString("^[a-zA-Z]+$", request.FormValue("engname")); !m {
+        	return false
+        }
+
+        邮件校验:
+        if m, _ := regexp.MatchString(`^([\w\.\_]{2,10})@(\w{1,})\.([a-z]{2,4})$`, request.FormValue("email")); !m {
+        	return false
+        }
+
+        手机校验:
+        if m, _ := regexp.MatchString(`^(1[3|4|5|8][0-9]\d{4,8})$`, request.FormValue("mobile")); !m {
+        	return false
+        }
+
+        身份证校验:
+        //验证15位身份证，15位的是全部数字
+        if m, _ := regexp.MatchString(`^(\d{15})$`, request.FormValue("usercard")); !m {
+            return false
+        }
+
+        //验证18位身份证，18位前17位为数字，最后一位是校验位，可能为数字或字符X。
+        if m, _ := regexp.MatchString(`^(\d{17})([0-9]|X)$`, request.FormValue("usercard")); !m {
+            return false
+        }
+
+预防 JS 作为参数传递:
+    // 转义输出到 client 端!
+    template.HTMLEscape(response, []byte(request.FormValue("username")))
+
+    // 非转义输出到 客户端, 如果 username 为 <script>alert()</script>, 则弹窗!
+    //io.WriteString(response, request.FormValue("username"))
 
 
+    // 下面的代码使用了转义 在服务端输出:
+    fmt.Printf("key = %v, value = %v \n", key, template.HTMLEscapeString(request.FormValue(key)))
 
+防止多次递交表单
+    采用解决方案为
+        前端使用:
+            <form>
+                <input type="hidden" name="token" value="{{.}}"/>
+            </form>
+
+        后端使用:
+            if request.Method == http.MethodGet {
+                // TODO: 生成 token
+                hash := crypto.MD5.New()
+                hash.Write([]byte(strconv.Itoa(time.Now().Nanosecond())))
+                token := fmt.Sprintf("%x", hash.Sum(nil))
+
+                // 将 token 写入表单中!
+                temp, err := template.ParseFiles(loginFilePath)
+                if err != nil {
+                    log.Fatal(err)
+                }
+                //  TODO: 写出 token
+                temp.Execute(response, token)
+            } else {
+                //CheckForm(request)
+                //FormMethd(request)
+
+                // TODO: 处理 token
+                token := request.FormValue("token")
+                if token == "" {
+                    // 非法 token
+                    fmt.Println("token is not legitimate!")
+                    return
+                } else {
+                    // 再次验证 token 是否合法 .....
+
+                    // 继续进行下面的代码
+                    PrintForm(request)
+
+                    // 转义输出到 client 端!
+                    template.HTMLEscape(response, []byte(request.FormValue("username")))
+
+                    // 非转义输出到 客户端, 如果 username 为 <script>alert()</script>, 则弹窗!
+                    //io.WriteString(response, request.FormValue("username"))
+                }
+
+            }
+
+
+处理文件上传
+    使用 前端页面 上传文件
+
+
+    使用 代码 模拟客户端 上传文件
 
 
 
