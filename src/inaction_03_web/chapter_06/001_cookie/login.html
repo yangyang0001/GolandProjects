@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>登录页面</title>
+    </head>
+    <body>
+        <form action="/login" method="post">
+            用户名:&nbsp;&nbsp; <input type="text" name="username"/>
+            <br/><br/>
+
+            密　码:&nbsp;&nbsp; <input type="password" name="password"/>
+            <br/><br/>
+
+            性　别:&nbsp;&nbsp; <input type="radio" name="gender" value="1" checked/>男
+                  &nbsp;&nbsp; <input type="radio" name="gender" value="0"/>女
+            <br/><br/>
+
+            年　龄:&nbsp;&nbsp; <input type="text" name="age"/>
+            <br/><br/>
+
+            邮　箱:&nbsp;&nbsp; <input type="email" name="email"/>
+            <br/><br/>
+
+            手　机:&nbsp;&nbsp; <input type="text" name="mobile"/>
+            <br/><br/>
+
+            生　日:&nbsp;&nbsp; <input type="date" name="birthday"/>
+            <br/><br/>
+
+            身份证:&nbsp;&nbsp; <input type="text" name="usercard"/>
+            <br/><br/>
+
+            爱　好:&nbsp;&nbsp; <input type="checkbox" name="hobby" value="football"/>足球
+                  &nbsp;&nbsp; <input type="checkbox" name="hobby" value="basketball"/>篮球
+                  &nbsp;&nbsp; <input type="checkbox" name="hobby" value="volleyball"/>排球
+                  &nbsp;&nbsp; <input type="checkbox" name="hobby" value="chess"/>象棋
+            <br/><br/>
+
+            水　果:&nbsp;&nbsp;
+                    <select name="fruit">
+                        <option value="apple">apple</option>
+                        <option value="pear">pear</option>
+                        <option value="banana">banana</option>
+                    </select>
+            <br/><br/>
+
+            描　述:&nbsp;&nbsp; <textarea name="description" rows="3" cols="30"></textarea>
+            <br/><br/>
+
+            <input type="hidden" name="token" value="{{.}}"/>
+            <input type="submit" value="登录"/>
+        </form>
+    </body>
+</html>
