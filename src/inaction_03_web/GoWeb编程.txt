@@ -189,7 +189,7 @@ web 服务:
         }
 
         英文校验:
-        if m, _ := regexp.MatchString("^[a-zA-Z]+$", request.FormValue("engname")); !m {
+        if m, _ := regexp.MatchString("^[a-zA-Z]+$", request.FormValue("username")); !m {
         	return false
         }
 
@@ -400,9 +400,54 @@ session 和 cookie
 ------------------------------------------------------------------------------------------------------------------------------------
 XML  处理
 
+
 JSON 处理
 
+
 正则  处理
+    正则表达式 验证字符, 最常用!
+    正则表达式 获取内容
+
+
+模板处理
+
+    前言概述:
+        主要是针对 GoWeb 的 html 文件的处理, go 语言提供了 template 包!
+        这里主要是 模仿 java 中成熟的 MVC 模式, 其发展过程为 servlet ---> jsp ---> springmvc!
+        因为 go 语言发展还不够完善, 这里主要是 模仿 JSP 中的 View 层的处理!
+
+    字段处理:
+        处理机制参考: 001_template处理机制.png
+        {{.FieldName}} 字段名称必须 首字母大写, 否则报错! go 语言 这种处理前端 字段的方式 离着 前后端分离 还有 至少2年的时间!
+
+文件操作
+    目录操作
+
+        创建单个文件夹, 举例如下:
+        path = "./maosan"
+        os.Mkdir(path, 0777)
+
+        创建嵌套文件夹 举例如下:
+        path = "./gousi/test1/test2"
+        os.MkdirAll("", 0777)
+
+        删除单个空文件夹
+        os.Remove("./maosan")
+
+        删除文件夹 及当前文件夹下的 所有文件
+        os.RemoveAll("./gousi")
+
+    文件操作
+        文件的创建
+        filepath := "./football_player.txt"
+        _, err := os.Create(filepath)
+
+        文件的删除
+        filepath := "./football_player.txt"
+        err := os.Remove(filepath)
+
+        文件的读取 写入 参考: file_input_output.go 或 input_output_review.go
+
 
 
 
