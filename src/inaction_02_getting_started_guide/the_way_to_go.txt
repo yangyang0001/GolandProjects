@@ -639,6 +639,7 @@ json 格式化
 
 gob
     go 语言中的 RPC 的使用, 这里只了解 编码解码的 原理! 案例中也没有 给出注册中心的概念! 这在 java 中有非常重要的 使用比例!
+    go 语言中的 RPC 是直接点 使用 TCP 或 HTTP 实现, 发送过去之后再进行反射调用!
 
 go 语言中的加密学
     参考 java_security 工程学习加密解密原理就可以了, 这里只是提供了 伪随机数生成器中的东西, md sh 相关的生成器之类的东西!
@@ -866,7 +867,7 @@ goroutine 常用方式:
 总结:
     就目前 go 处理 web 的能力 和 java 比简直是 天壤之别! go 的发展潜力很大!
 
-用 rpc 实现远程过程调用  参考 模块: 012_rpc_objects, 012_rpc_server, 012_rpc_client
+用 RPC 实现远程过程调用  参考 模块: 012_rpc_objects, 012_rpc_server, 012_rpc_client
 
     核心使用如下:
     服务端

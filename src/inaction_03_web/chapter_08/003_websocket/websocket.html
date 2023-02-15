@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>WebSocket案例</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var socket = null;
+            var wsuri = "ws://localhost:1234";
+
+            window.onload = function() {
+
+                console.log("onload");
+
+                socket = new WebSocket(wsuri);
+
+                // onopen 建立连接后触发
+                socket.onopen = function() {
+                    console.log("connected to " + wsuri);
+                }
+
+                // onclose 关闭连接时触发
+                socket.onclose = function(e) {
+                    console.log("connection closed (" + e.code + ")");
+                }
+
+                // onmessage 收到消息后触发
+                socket.onmessage = function(e) {
+                    console.log("message received: " + e.data);
+                }
+
+                // onerror 发生错误时触发
+                socket.onerror = function (e) {
+                    console.log("connection error (" + e + ")")
+                }
+            };
+
+            function send() {
+                var msg = document.getElementById('message').value;
+                socket.send(msg);
+            };
+        </script>
+
+        <h1>WebSocket 测试案例</h1>
+
+        <p>
+            Message: <input id="message" type="text" value="Hello World">
+        </p>
+
+        <button onclick="send();">Send Message</button>
+    </body>
+</html>
