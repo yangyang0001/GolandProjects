@@ -1,0 +1,85 @@
+断点:
+break InitializedJVM: 在InitializedJVM 函数入口出设置断点
+break java.c:JavaMain:  在源文件java.c的JavaMain函数入口处设置断点
+break os_linux.cpp:4380: 在源文件os_linux.cpp的第4380行处设置断点
+break *0x8048000:     在地址为0x8048000的地址处设置断点
+delete 1: 删除断点1
+delete:   删除所有断点
+
+执行:
+step: 执行1条语句, 会进入函数
+step n: 执行n条语句, 会进入函数
+next: 与step 类似, 但不会进入函数
+next n: 与step n类似, 但是不进入函数
+continue: 继续运行
+finish: 运行值当前函数返回后退出
+
+查看代码:
+list n: 查看当前源文件中第农行的代码
+list InitializedJVM: 查看InitializedJVM函数开始位置的代码
+list: 查看更多的行
+list -: 查看上次查看的代码行数之前的代码
+默认, GDB打印10行, 若需要调整, 可使用set listsize n: 调整打印行数为n行
+
+查看栈帧:
+frame n: 从当前栈帧移动到#n栈帧
+up n: 从当前栈帧向上移动n个栈帧
+down n: 从当前栈帧向下移动n个栈帧
+select -frame: 查看更多的行
+backtrace: 查看整个调用栈
+backtrace n:    与backtrace类似, 只不过只查看4个栈帧
+backtrace full: 查看整个调用栈, 另外还打印处局部变量表和参数等
+info args: 查看函数参数
+info locals: 查看局部变量
+
+查看数据:
+print expr: 查看expr的值, 其中expr是源文件中的表达式
+print /f expr n: 以f指定的格式查看expr的值, 其中f表示的格式可以为以下的格式
+    x: 十六进制
+    d: 有符号整数
+    u: 无符号整数
+    o: 八进制整数
+    t: 二进制整数
+    c: 字符常量
+    f: 浮点数
+    s: 字符串
+    r: 原始格式
+    a: 地址
+    x 0xbfffd034: 查看内存地址为 0xbfffd34的值
+disassemble: 查看汇编代码, 反汇编当前函数
+info registers: 查看所有寄存器的值
+print $eax: 以十进制形式查看寄存器%eax的值
+print /x $eax: 以十六进制形式查看寄存器%eax的值
+
+
+
+实战相关命令
+gcc -g HelloWorld.c 命令
+gdb a.out       进入 gdb 环境
+start           开始调试gdb
+ctrl + x + a    开启gdb 面板
+refresh         刷新gdb面板
+layout next     切换不同的面板 [有几种面板模型]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
