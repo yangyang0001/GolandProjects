@@ -625,7 +625,7 @@ defer recover panic 的处理方式, 同级捕获 panic 和 冒泡捕获!
 
 GDB 调试:
     推荐使用:
-        本人开发工具是 IntelliJ IDEA 安装 GO 插件, 这个插件本身就可以调试, 改为调试文件就可以了! 这个调试 java 没有任何区别!
+        本人开发工具是 IntelliJ IDEA 安装 GO 插件, 这个插件本身就可以调试, 改为调试文件就可以了! 这和调试 java 没有任何区别!
 
     GDB 调试:
         可以参考 java_hotspot_action 工程中对 jvm 的调试! jvm 是 C++ 语言书写! 不同的是这里是 调试 go 语言!
