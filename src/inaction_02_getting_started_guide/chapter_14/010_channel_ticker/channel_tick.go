@@ -29,5 +29,5 @@ func SayHello()  {
 }
 
 func AfterFunc()  {
-	fmt.Printf("after func invoke, time = %v", time.Unix(time.Now().Unix(), 0).Format("2006-01-02 15:04:05"))
+	fmt.Printf("after func invoke, time = %v \n", time.Unix(time.Now().Unix(), 0).Format("2006-01-02 15:04:05"))
 }
