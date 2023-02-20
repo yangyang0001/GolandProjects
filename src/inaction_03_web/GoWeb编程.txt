@@ -83,6 +83,28 @@ interface
     空接口:
         使用 空接口 来判定任何东西的 类型!
 
+
+    空接口使用 经典案例:
+        通过 空接口 查询当前变量的具体类型:
+        func interface_type(i interface{}) {
+            switch i.(type) {
+            case string:
+                fmt.Printf("interface type is string, value = %v \n", i)
+
+            case int:
+                fmt.Printf("interface type is int, value = %v \n", i)
+
+            case float32:
+                fmt.Printf("interface type is float32, value = %v \n", i)
+
+            case float64:
+                fmt.Printf("interface type is float64, value = %v \n", i)
+
+            case Mine:
+                fmt.Printf("interface type is Mine, json = %v \n", jsonParse(i))
+            }
+        }
+
     接口合并:
         接口A, 接口B, 如果想使用 接口A和接口B中的合并成为一个新的接口C, 只需要使用如下的方式构造一个新的接口就可以了!
 
